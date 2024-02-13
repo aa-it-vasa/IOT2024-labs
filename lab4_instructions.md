@@ -4,24 +4,24 @@
 
 In the previous lab, we organised Things using gateways and ensured that there
 were no unintended cross-talk between devices of different groups. In this lab,
-we will extend gateway's usefulness to perform close-to-sensor computation.
-Close-to-sensor computation, or edge-computation, is a new trend to manage
+we will extend the gateway's usefulness to perform close-to-sensor computation.
+Close-to-sensor computation, or edge computation, is a new trend to manage
 high-bandwidth data emerging from the sensors. By processing the data at the
 edge, either completely or partially, we reduce the communication burden on the
 network infrastructure. Also, for a latency critical application a gateway
 reduces the response time between events and manages the risk related to
 network outages.
 
-There are several concerns with edge-computation. Unlike in the lab, you can
+There are several concerns with edge computation. Unlike the situation in the lab, you can
 not always rely on the local network to SSH into the device. So a remote deployment
 and management scheme is necessary. Also, the logic may vary from one gateway
 to another. So we need a solution that scales and handles diverse computational
 needs. 
 
-Web-servers on gateways and a version control should meet most of the concerns
+Webservers on gateways and a version control should meet most of the concerns
 expressed above. Coupled with a dashboard to manage all the gateways, this solution
-should scale if more gateways are added. AWS Lambda is a similar solution, but
-without the need to setup a web-server or a dashboard. As a developer, you
+would scale as more gateways are added. AWS Lambda is a similar solution, but
+without the need to setup a webserver or a dashboard. As a developer, you
 would write the logic using one of the supported languages (Python 3 in this case) and deploy them on
 the gateway along with the device certificates, policies etc. 
 
@@ -46,7 +46,7 @@ respond to events sent by cloud as well as devices in the group.
 ## Run Greengrass Daemon
 
 Make sure Greengrass core is running on your RPI. For example check the AWS Console under _AWS IoT > Manage > Greengrass devices > Core devices_. It the status is not `Healthy` and the status reported is less than the amount of time since you rebooted the RPI, then reboot the PI, check e.g., the 
-status of the Greengrass service
+status of the Greengrass service using:
 ```
 rpi> sudo systemctl status greengrass
 ```
@@ -63,15 +63,14 @@ If you cannot get it working, check with the lab assistant or recreate the Green
 
 ## Deploy AWS Lambda on AWS Greengrass Core
 
-You are now ready to configure and deploy the Lambda function for AWS
-Greengrass.
+You are now ready to configure and deploy the Lambda function for AWS Greengrass.
 
 ### Create and Package a Lambda Function
 
 In order for a Python Lambda function to run on a AWS Greengrass device, it
 must be packaged with specified folders from the Python AWS Greengrass core
 SDK. This step has already been done and you can find an archive
-`hello_world_python_lambda.zip` in the folder `SourceCode\Lab4` in the Github repository. You can view the
+`hello_world_python_lambda.zip` in the folder `SourceCode\Lab4` in the Github repository. Check the
 contents of this archive to verify that `lambda_function.py` is packaged
 with AWS Greengrass core SDK, which forms the external dependency.  You are now
 ready to upload your Lambda function `.zip` file to the AWS Lambda console.
@@ -97,7 +96,7 @@ ready to upload your Lambda function `.zip` file to the AWS Lambda console.
 
 8. When you are ready to deploy this version press the button _Deploy_. 
    
-9. To check that there are now issues with the code, you can select the _Test tab_. Note that this is not the same as the Test-button in the code source box. press the _Test_ button. Also you might need to change the _Event JSON_ input which corresponds to the input given to the lambda function.
+9. To check that there are no issues with the code, you can select the _Test tab_. Note that this is not the same as the Test-button in the code source box. Press the _Test_ button. Also you might need to change the _Event JSON_ input which corresponds to the input given to the lambda function.
 
 10. When you are ready to publish a version of your lambda function (a published version can be access by other parts of AWS) select _Actions > Publish new version_. Write a description in the _Version description_ field, such as _First version_ (or leave it empty), then select _Publish_.
 
@@ -119,7 +118,7 @@ ready to upload your Lambda function `.zip` file to the AWS Lambda console.
 
    Repeatedly triggering the handler of a *long-lived Lambda function* might queues up responses from the AWS IoT Greengrass core. This is in contrast to an *on-demand (not pinned) Lambda function* which might create a new container for a new invocation if the handler in previsouly created containers are still busy (i.e. processing data).
 
-   After this session, if you have time, you can change the settings and check the difference in behaviour. You can also have a look at these two examples: [here](https://docs.aws.amazon.com/greengrass/latest/developerguide/long-testing.html) and [here](https://docs.aws.amazon.com/greengrass/latest/developerguide/on-demand.html).
+   After this session, if you have time, you can change the settings and check the difference in behaviour. 
 
 7. Press _Create component_.
 
@@ -231,5 +230,5 @@ Modify the initial Lambda code as you seem fit and establish necessary forward a
 3. Lambda functions prints a log on Raspberry Pi gateway and this can serve as a good way to debug your implementations. 
    ```
    rpi> sudo cat /greengrass/v2/logs/greengrass.log
-   rpi> sudo cat /greengrass/v2/logs/LAMBDANAME.log
+   rpi> sudo cat /greengrass/v2/logs/lambdaname.log
    ```
