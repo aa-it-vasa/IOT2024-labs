@@ -59,7 +59,7 @@ Now we will verify that Arduino IDE has read and write access to the Arduino
 board.  In the Arduino IDE, open the Sketch `TestLed` available from the folder Lab1. Select the board _MKR WiFI 1010_  (Tools->Board->SAMD 32-bits ARM cortex M0+Boards) and be sure you use the correct serial port (below the selected board in the Tools menu). You might need to re-active the USB sharing from the VirtualBox menu if you do not see the correct serial port from the listed option.
 
 Verify/compile and upload the sketch to the Arduino MKR WiFi 1010 board (in the menu Sketch->Verifu/Compile and Upload)). If
-everything goes well, you must see a yellow LED blinking on the board. You are done for the arduino setup as you can compile and upload an program on the board from the virtual environment.
+everything goes well, you must see a yellow LED blinking on the board. You are done for the Arduino setup as you can compile and upload an program on the board from the virtual environment.
 
 ## MQTT Client Setup
 
@@ -68,12 +68,13 @@ The overall architecture of the system you will implement is described in the fi
 
 
 In order to subscribe to the messages that your Arduino board would send,
-we need to setup a MQTT client on your desktop (the unbuntu VM in your case). The mosquitto MQTT client was already install on the provided VM (see https://mosquitto.org/download/)
+we need to setup a MQTT client on your desktop (the Ubuntu VM in your case). 
+The mosquitto MQTT client is already installed on the provided VM (see https://mosquitto.org/download/)
 
 
 ## Arduino + Temperature Sensor
 
-Now we are set to measure room temperature and transmit to a remote MQTT server.
+Now we are set to measure the room temperature and transmit it to a remote MQTT server.
 
 ### In Turku
 First setup the hardware as shown in the circuit diagram below.
@@ -81,22 +82,22 @@ First setup the hardware as shown in the circuit diagram below.
 ![](./figs/schematic_mkr_1000.png)
 
 **IMPORTANT: Do not flip Vcc and GND connections. Also, do not short Vcc and GND.
-Power the board via the USB cable AFTER you verify that the circuit is correct**
+Power the board via the USB cable AFTER you have verified that the circuit is correct**
 
 The setup itself should similar to the figure below. The thermistor IC's pin
 numbers are determined by holding the flat end towards you, with pins facing
-downwards and counting from left. From the schematic, you connect first pin of
+downwards and counting from left. From the schematic, you connect the first pin of
 the thermistor to third pin on Arduino marked as **Vcc**. Connect the second
 pin of the thermistor to second pin on the Arduino situated on the other side
-of the Vcc and is marked as **DAC0/A0**. Connect the third pin of the Arduino
-to the fourth pin of the Arduino board, marked as **GND**. GND pin is on the
+of the Vcc and is marked as **DAC0/A0**. Connect the third pin of the thermistor
+to the fourth pin of the Arduino board, marked as **GND**. The GND pin is on the
 same side as Vcc. 
 
 ![](./figs/breadboard_mkr_1000.png)
 
 ### In Vaasa
 
-The setup itself should similar to the figure above, however note that the 
+The setup itself is similar to the figure above, however note that the 
 thermistors pins are in different order, see 
 
 ![](./figs/lmt87.png)
@@ -105,27 +106,25 @@ Numbers are indicated in the figure. From the schematic, you connect the third p
 the thermistor to third pin on Arduino marked as **Vcc**. Connect the second pin 
 of the Arduino to the fourth pin of the Arduino board, marked as **GND**. GND 
 pin is on the same side as Vcc. Connect the first pin of the thermistor to 
-second pin on the Arduino situated on the other side of the Vcc and is marked 
+second pin on the Arduino situated on the other side of the Vcc marked 
 as **DAC0/A0**. 
 
 ### For both Turku and Vaasa
 
-Once the hardware is setup, open the Sketch `mqtt_unsecure` available from the Lab1 folder. 
+Once the hardware setup is complete, open the Sketch `mqtt_unsecure` available from the Lab1 folder. 
 
 **Note that if you are doing the labs in Vaasa**, we are using another thermistor and the code for the function `getTemp()` is different. Therefore, there is a different folder for Vaasa, and you need to rename this folder from `mqtt_unsecure_vaasa` to `mqtt_unsecure` for it to open properly in ArduinoIDE.
 
 Have a look at the code and understand what it does before uploading the code. Change the content of the variable _group = "MyGroup"_
-Use the provided WiFi username and password if needed (check the defined variable from the .h header file). Remember to check the ArduinoMqttClient library and WiFiNINA libraries (Tools->manage Library) were installed. 
-
-
+Use the provided WiFi username and password if needed (check the defined variable from the .h header file). Remember to check that the ArduinoMqttClient library and WiFiNINA libraries (Tools->manage Library) were installed. 
 
 Compile the code and upload it to the board. 
 
 Verify the state of the Arduino board by connecting to the *Monitor* _(in Tools-> Serial monitor)_ in the
 IDE.  You can see the transmitted MQTT messages by subscribing on [broker.hivemq.com](http://www.mqtt-dashboard.com/index.html) to the relevant topic
 (read the code to get the relevant topic). **In your VM machine** (or in, for example, a local Linux-installation) execute
-the mosquitto_sub command as below in a terminal. Substitute `responseTopic` within the quotes (retain the quotes
-later) with the topic your device is sending the messages into. You may have to
+the mosquitto_sub command below in a terminal. Substitute `responseTopic` within the quotes (retain the quotes) 
+with the topic your device is sending the messages into. You may have to
 change the topic, so read the source code.
 
 ```bash
@@ -140,14 +139,14 @@ mosquitto_sub -h broker.hivemq.com -t "responseTopic"
    if necessary. Get a working understanding of the
    [WiFiNINA](https://www.arduino.cc/en/Reference/WiFiNINA) and
    [ArduinoMqttClient](https://github.com/arduino-libraries/ArduinoMqttClient)
-   library, although you don't have to explain the functionality in the report. (1 p)
-2. What is the value returned by mqttClient.messageQoS() ? What does it mean? (1 p)
-3. What is the value returned by mqttClient.messageRetain() ? What does it mean? (1 p)
+   library, although you do not have to explain the functionality in the report. (1 p)
+2. What is the value returned by `mqttClient.messageQoS()` ? What does it mean? (1 p)
+3. What is the value returned by `mqttClient.messageRetain()` ? What does it mean? (1 p)
 
 ## Command and Reponse
 
 The code also has a subscriber component built in. Have a look at the subscriber function
-`onMqttMessage`. This is called when the device receives a message on a specific topic. To see it
+`onMqttMessage`. This function is called when the device receives a message on a specific topic. To see it
 working, open another terminal and do the following. Replace "commandTopic" with
 the appropriate topic name and "command" with appropriate message (read and understand the function `onMqttMessage`).
 
@@ -157,9 +156,9 @@ mosquitto_pub -h broker.hivemq.com -t "commandTopic" -m "command"
 
 ### To do
 
-1.  Modify your subscriber to implement these two commands (2 p)
+1.  Modify your subscriber to implement these two commands (2 p):
     1. The **ON** command will turn on the onboard LED. 
-    2. Similarly, **OFF** command will turn off the onboard LED.
+    2. Similarly, the **OFF** command will turn off the onboard LED.
     3. Any other command will not generate a response. 
 2. Modify the publisher to transmit messages only when an appropriate **TEMP** command
    is received. (2 p)
@@ -168,8 +167,8 @@ mosquitto_pub -h broker.hivemq.com -t "commandTopic" -m "command"
 
 Hint: Check
 [String](https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/)
-to create strings. Read character by character and append to the string. Don't
-forget to terminate with a Null character (`'\0'`) in the end. 
+for information about how to create strings. Read character by character and append to the string. Do not
+forget to terminate with a null character (`'\0'`) in the end. 
 
 ## Wrap Up
 
