@@ -83,6 +83,7 @@ To setup the Greengrass software on the RPI we will use the Greengrass device se
 1. Configure your device and installs the AWS IoT Greengrass Core software on it.
 2. Configure your cloud-based resources.
 
+### Setup the AWS access key
 First we will setup an access key. You only need to do this once per group (as long as you remember the key).
 1. In the AWS Console press your user name in the upper right corner and select _Security credentials_. You do not have permissions to most of the settings on this page, but under _Access keys_ there is the option for you to create a new one. Press _Create access key_ select _Other_ and press _Next_. Provide a description, e.g., your group members and press _Create access key_. 
 2. Save the _Access key_ and _Secret access key_ to a text file on the VM (you can for example select _Download .csv file_).
@@ -90,6 +91,7 @@ First we will setup an access key. You only need to do this once per group (as l
 
 **Note:** If the _Create access key_ button is deactivated there might already be two assigned keys (which is the maximum). _Deactivate_ and _Delete_ the old keys before adding a new one! Check that the user is not using the access keys before deactivation.
 
+### Setup the Greengrass software
 Perform the following steps to setup the Greengrass software:
 
 1. In the AWS Console go to _Services > Internet of Things > IoT Greengrass_. 
@@ -98,15 +100,12 @@ Perform the following steps to setup the Greengrass software:
 4. Give the core device a unique name that you will remember. For example _GreenGrassCore-groupname_. Write down the name of the core.
 5. Select _Enter a new group name_ under _Thing group_. Give the group a unique name, for example, _GreengrassGroup-groupname_. Write down the name of the group.
 6. Select _Linux_ under _Operating System_.
-7. Some credentials are needed for the script to be able to communicate with the corresponding AWS services. Depending on the setup, these can be different for each gateway device or shared. For simplicity and security, these will be provided to each group during the lab. It is easiest if these are saved as environmental variables in the shell you are using on the RPI. Execute the following commands on the RPI where the keys are replaced with their correct values. Also remember to remove the `pi>` statement:
+7. Some credentials are needed for the script to be able to communicate with the corresponding AWS services. These are the _Access key_ and _Secret access key_ generated in the previous step. It is easiest if these are saved as environmental variables in the shell you are using on the RPI. Execute the following commands on the RPI where the keys are replaced with their correct values. Also remember to remove the `pi>` statement:
    ```
    rpi> export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
    rpi> export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
    ```
-8. Download and start the script according to the instructions on the AWS Console. You can use `curl` to download the script, for example the following command will download and execute the script:
-   ```
-   curl https://d1onfpft10uf5o.cloudfront.net/greengrass-device-setup/downloads/gg-device-setup-latest.sh > gg-device-setup-latest.sh && chmod +x ./gg-device-setup-latest.sh && sudo -E ./gg-device-setup-latest.sh bootstrap-greengrass-interactive 
-   ```
+8. Download and start the script according to the instructions on the AWS Console. You can use `curl` to download the script.
 9. Run the installer by executing the **specific** command given under _Run the installer_. Make sure you understand what the command does and that it executes successfully, i.e., that there are no error messages. It should output something similar to:
    ```
    Provisioning AWS IoT resources for the device with IoT Thing Name: [GreengrassQuickStartCore-andreas]...
@@ -167,7 +166,7 @@ Now we need to connect the thing we created to the Greengrass core device.
 2. There are several tabs on the detail page of the core device (the RPI's Greengrass instance). 
    - Components: Here all the different software components deployed to the core device is listed. For example, we have an MQTT broker (Moquette) and a MQTT bridge deployed. It is also possible to deploy what components are deployed under _Manage > Greengrass devices > Deployments_. We will look at this in the next lab.
    - Client devices: here we can add local Things that will communicate through the Greengrass instance installed on the RPI. These can be, e.g., sensors or actuators (or our simulated thing in this case).
-3. To setup discoverability for the things, select the tab _Client devices_ and press the button _Cloud discovery configuration_. Select _Target type_ as _Core device_. The _Target name_ field should be prepopulated with the name of the Greengrass core device name you have created.
+3. To setup discoverability for the things, select the tab _Client devices_ and press the button _Configure cloud discovery_. Select _Target type_ as _Core device_. The _Target name_ field should be prepopulated with the name of the Greengrass core device name you have created.
 4. Press the button _Associate client devices_. Enter the name of your created thing into the _AWS IoT thing name_ and press _Add_. Then press _Associate_. Make sure that your thing is now in the list _Associated client devices_ on the _Client devices_ tab.
 5. Under _Step 3_ the following items should be checked.
 
