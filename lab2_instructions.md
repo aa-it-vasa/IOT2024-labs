@@ -52,8 +52,8 @@ In our case we will register our device with AWS IoT core.
 2. Once logged into the AWS Management Console, **ensure that you are in the
    _Frankfurt_ region.** This information is in the top right corner of the page.
 3. Under Services (next to the AWS logo), select _Internet of Things_, and open _IoT Core_.
-4. Under _Manage_ and _Things_, click _Create things_. We will register your device now.
-5. Click _Create a single thing_.
+4. Under _Manage_, _All devices_ and _Things_, click _Create things_. We will register your device now.
+5. Click _Create single thing_.
 6. In the page _Specify thing properties_, give your Thing a
    unique name, say _arduino-groupX_. With rest as defaults, select _Next_.
 7. In the page _Configure device certificate_, use _Upload CSR_.
@@ -69,8 +69,8 @@ create a policy and attach it to your thing.
 
 1. From the left menu, go to _Security_ and _Policies_. Click _Create policy_ to create
    a new policy.
-2. Name a policy _Arduino-Policy-GroupName_. Select `*` under _Action_ and `*` under
-   _Resources_. Click _Allow_ under _Effect_. Click Create. Note that we are giving all
+2. Name a policy _Arduino-Policy-GroupName_. Select _Allow_ under _Effect_. Select `*` under _Action_ and `*` under
+   _Resources_. Click Create. Note that we are giving all
    permissions to modify all resources. In general, this is a bad practice. See
    the optional exercise for how to design a good policy.
 
@@ -92,7 +92,7 @@ Now the certificate is ready to be downloaded.
 
 1. Import\Open the sketch `AWS_IoT` from the `Lab2` folder. Modify the secrets
    _SSID_, _PASS_ and _GROUP_.
-2. Broker can found in _AWS IoT_ page. From the left menu, go to _Settings_.
+2. Broker can found in _AWS IoT_ page. From the left menu, go to _Settings_ and search for the endpoint URL.
 3. Fill the `client_certificate` within the paranthesis `()` with text of
    `arduino_client.pem.crt` similar to the one of `root_ca`. The root CA was
    obtained from this [link](https://www.amazontrust.com/repository/AmazonRootCA1.pem).
@@ -103,7 +103,7 @@ Now the certificate is ready to be downloaded.
 Instead of using a mosquitto subscriber, we will use the client implementation from
 AWS.
 
-1. From the left menu under _AWS IoT_, select _Test_ and _MQTT test client_.
+1. From the left menu under _Test_ select _MQTT test client_.
 2. Type in the topic to subscribe (read the Arduino code). Select _Display
    payload as strings_ and finally select _Subscribe_.
 3. You can also send messages from the same window. Fill out _Publish to topic_
@@ -128,11 +128,10 @@ Do these exercises and mention your findings in your report for extra points.
 ### Add another "Device"
 
 You can use mosquitto publish subscribe client to talk to AWS. During device
-registration, instead of using CSR, choose the first option _One-click
-certificate creation (recommended)_.  Download the public key, private key and
+registration, instead of using CSR, choose the first option _Auto-generate a new certificate (recommended)_.  Download the public key, private key and
 certificate. Save as `client-public.pem.cert`, `client.key` and
 `client.pem.cert`. Also, download the root CA from the link given above (or
-copy from the Arduino code) and save as `root_ca.pem`. Activate the certificat.
+copy from the Arduino code) and save as `root_ca.pem`. Activate the certificate.
 
 Attaching a valid policy
 remains same as that of an arduino. You can now publish/subscribe to a topic of
