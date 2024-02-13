@@ -3,28 +3,28 @@
 ## Overview
 
 In the previous lab, we secured the connection between the MQTT broker and the
-clients. However, there is still scope for unintended inter-device cross-talk.
+clients. However, there is still possibilities for unintended inter-device cross-talk.
 You can restrict this by designing good policies and this was covered in one of
-the optional tasks of the last lab. If the intention is to organise Things
-together in a logical fashion, for e.g. at the customer level or at a level of
+the optional tasks of the last lab. If the intention is to organize Things
+together in a logical fashion, e.g., at the customer level or at a level of
 a floor of a building, then setting per customer and per device policy does not
-scale. We need a better way of organising them and in process make sure that
+scale. We need a better way of organizing them and in process make sure that
 the devices of one customer cannot unintentionally connect with the devices of another customer. 
 
 Gateways are one good way to achieve vertical hierarchy among things. Policies
 are good way of managing horizontal hierarchy.  For instance, it is useful to
-have write only policy to a certain topic for all the data coming from all
+have a write only policy to a certain topic for all the data coming from all
 temperature sensors sold to all customers, while the gateways prevent reading
-one customer's data by another (malicious) customer. Gateways also act as an
-edge and provide local computational infrastructure. 
+one customer's data by another (malicious) customer. Gateways also act as 
+edge devices and provide local computational infrastructure. 
 
 There are several concerns with the gateway pattern. You need to design and
-sell an additional piece of hardware. The Things and gateway need to discover
+sell an additional piece of hardware. The Things and the gateway need to discover
 each other and establish a secure connection to allow dynamic scaling of Things
 infrastructure. A problem that is exacerbated when Things share or change
 association between the gateways. The communication should not only be
 coordinated between gateway and Things, but also between the Things and your
-cloud server.  The logic (software) for collecting and analysing data from
+cloud server. The logic (software) for collecting and analysing data from
 Things connected to each gateway may differ and this requires a scalable
 solution to deploy and manage logic across all of the gateways.
 
@@ -34,32 +34,31 @@ local devices, negating many of the concerns associated with the gateway
 pattern expressed above. Among other packages, Greengrass software consists of
 a MQTT broker that acts as a bridge between AWS IoT broker and Things, a
 computing platform similar to cloud instances but on the gateway, and a PKI
-based secure communication setup.  Greengrass coordinates with AWS IoT service
-and helps your Things to "automagically" discover a closest deployed gateway
+based secure communication setup. Greengrass coordinates with AWS IoT service
+and helps your Things to "automagically" discover the closest deployed gateway
 and connect to it. Once the connection is established, the Things can collect
 and analyse data closer to the source of information, react autonomously to
 local events, and communicate securely with each other within local network
-even when the gateway is cutoff from the internet.
+even when the gateway is cut off from the internet.
 
 ![](./figs/l3_gg_overview.jpg)
 
 The goal of this lab is to understand how scalable gateways can be deployed,
-while managing a secure discovery and connection processes between Things.  You
-will also test your setup for unintentional cross-talk. [Appendix](#appendix) gives a brief
+while managing a secure discovery and connection processes between Things. 
+[Appendix](#appendix) gives a brief
 explanation on various concepts that you will come across during the lab
-exercise and walks you through discovery and connection management.
+exercises and walks you through discovery and connection management.
 
 ## Setup the hardware
 
 1. We will use a Raspberry Pi as the device gateway. The device is already
-   powered up and connected to network. To connect to the Raspberry Pi,
-   you need the IP address of the gateway. The IP address should be given
-   to you during the lab.
-   Of course to be able to reach your gateway from the VM, your laptop needs to 
-   be also conected to the same network using the same wireless network as in Lab 1. 
-2. To connect to the gateway, in your VM open a terminal and ssh into it.
+   powered up and connected to the network. To connect to the Raspberry Pi,
+   you need its IP address. The IP address will be given to you during the lab.
+   To be able to reach your gateway from the VM, your laptop also needs to 
+   be conected to the same network using the same wireless network as in Lab 1. 
+2. To connect to the gateway open a terminal in you VM and ssh into it.
    The username is `pi` and password is `raspberry`.
-   Commands run in Raspberry Pi is preceded `pi>` and in your VM as `vm>`.
+   Commands run in Raspberry Pi is preceded `rpi>` and in your VM as `vm>`.
 
    ```bash
    vm> ssh pi@IPADDRESS
@@ -81,7 +80,7 @@ exercise and walks you through discovery and connection management.
 ## Setup Greengrass Core Device
 
 To setup the Greengrass software on the RPI we will use the Greengrass device setup script provided by AWS. This script will
-1. Configure your device and installs the AWS IoT Greengrass Core software.
+1. Configure your device and installs the AWS IoT Greengrass Core software on it.
 2. Configure your cloud-based resources.
 
 First we will setup an access key. You only need to do this once per group (as long as you remember the key).
@@ -101,10 +100,10 @@ Perform the following steps to setup the Greengrass software:
 6. Select _Linux_ under _Operating System_.
 7. Some credentials are needed for the script to be able to communicate with the corresponding AWS services. Depending on the setup, these can be different for each gateway device or shared. For simplicity and security, these will be provided to each group during the lab. It is easiest if these are saved as environmental variables in the shell you are using on the RPI. Execute the following commands on the RPI where the keys are replaced with their correct values. Also remember to remove the `pi>` statement:
    ```
-   pi> export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-   pi> export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+   rpi> export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+   rpi> export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
    ```
-8. Download and start the script according to the instructions on the AWS Console. You can use `curl` to download the script, for example:
+8. Download and start the script according to the instructions on the AWS Console. You can use `curl` to download the script, for example the following command will download and execute the script:
    ```
    curl https://d1onfpft10uf5o.cloudfront.net/greengrass-device-setup/downloads/gg-device-setup-latest.sh > gg-device-setup-latest.sh && chmod +x ./gg-device-setup-latest.sh && sudo -E ./gg-device-setup-latest.sh bootstrap-greengrass-interactive 
    ```
@@ -131,15 +130,15 @@ Perform the following steps to setup the Greengrass software:
    Configured Nucleus to deploy aws.greengrass.Cli component
    Successfully set up Nucleus as a system service
    ```
-   **Note:** If you get an error message about `<username> is not authorized to perform: iam:PassRole` then check that you are in the Frankfurt region (eu-central-1) in the console and in your command.
+   **Note:** If you get an error message about `<username> is not authorized to perform: iam:PassRole` then check that you are in the Frankfurt region (eu-central-1) in both the AWS console and in your command.
 10. Press _View core devices_ to return to the list. Your device should now be visible in the list and its status should be _Healthy_. 
 
 
 
 ## Create Things
 
-Unlike in previous labs, we will not use Arduino WiFi board to connect to the
-Greengrass Core.  We will create a simulated Thing instead. This is because the
+Unlike in previous labs, we will not use the Arduino WiFi board to connect to the
+Greengrass Core.  We will instead create a simulated Thing in the terminal. This is because the
 discovery process requires additional library that interacts with AWS IoT core
 using REST APIs. In theory, we can do this with Arduino, but this will require
 writing an additional library, something Arduino is lacking at this time.
@@ -259,14 +258,14 @@ to also print new lines that are printed in the log file.
 2. In your VM, run the following commands
    
    ```
-   vm> cd ./Publisher_Sim
-   vm> python3 ../aws-iot-device-sdk-python-v2/samples/pubsub.py --endpoint ENDPOINT --key publisher_sim-private.pem.key --cert publisher_sim.pem.crt --client_id Publisher_GROUPNAME --topic 'saiot/GROUPNAME/publish' --message 'Hello World' 
+   vm> cd Publisher_Sim
+   vm> python3 ../aws-iot-device-sdk-python-v2/samples/pubsub.py --endpoint ENDPOINT --key publisher_sim-private.pem.key --cert publisher_sim.pem.crt --client_id Publisher_GROUPNAME --topic 'saiot/GROUPNAME/publish' --message 'Hello World From GroupName' 
    ```
    You can get the ENDPOINT from _AWS IoT_ -> _Settings_ and under _Custom
    Endpoint_. The names of topic must match with topic name in all the
    above steps. Client id option must match the name of the thing.
 
-**Verify**: If connection is not established, verify endpoint is correct.
+**Verify**: If the connection is not established, verify the endpoint is correct.
 Also verify that the certificate paths are correct. The Thingname should be
 same as the Thing name under _Manage > All devices > Things_. Another thing to check is that the certificate for the thing is activated: Open your thing under _Manage > All devices > Things_. Under the _Certificates_ tab, there should be a certificate that is indicated as `Active`. 
 
@@ -283,7 +282,7 @@ If you run these commands on your own machine (not using the VM), you will proba
    module and use `perf_counter()` to measure the time. See
    [documentation](https://docs.python.org/3/library/time.html#time.perf_counter). Compare the measured time with the ping value optained from the VM to your gateway. (7p)
 
-## Optional Tasks - Needs updating!
+## Optional Task
 
 
 
@@ -295,30 +294,12 @@ try to simulate a malicious subscriber using this Thing. After creation, select 
 Instead of using the `Publisher_Sim`, use `Snoopy_Subscriber_GROUPNAME` and try
 to publish or subscribe to the same topic. 
 
-### Hacked Thing
-
-Lets say `Publisher_Sim` Thing was stolen and was hacked. From the device, the
-hackers were able to retrieve group CA, topic, certificate, and thing name. As
-the private key was stored in the EEPROM of the device, it remained a secret
-and it was not stolen. Now check if you can connect to the Group and subscribe
-or publish to the same topic. You need another piece of code `snoopy.py`
-instead of `pubsub.py`. You also need to locate GROUPCA. It usually is in the
-`Publisher_Sim`.
-
-```
-vm> cd ./Publisher_Sim
-vm> python3 ../Lab3/snoopy.py -i IPADDRESS -c publisher_sim.pem.crt -g GROUPCA -k Snoopy_Subscriber_GROUPNAME/snoopy_subscriber-private.pem.key -n Publisher_GROUPNAME -t saiot/GROUPNAME/publish -M "Snooping..."
-
-```
-
-What does this tell about a good practice to setup security in IoT devices?
-
 ## Appendix
 
 A Greengrass _Group_ consists of exactly one _Core_ along with a logical
 collection of Things. The _Core_ manages connection between Things, gateway and
 IoT services along with providing a platform to deploy compute instances from
-the cloud. AWS calls this computation platform as AWS Lambda and if time
+the cloud. AWS calls this computation platform AWS Lambda and if time
 permits, we will explore this in the next lab. 
 
 A Thing gets associated with a Group when you associate Thing's certificate
@@ -352,7 +333,7 @@ certificate presented by a gateway during TLS mutual authentication.
 The mutual authentication happens as follows: 
 
 1. The Thing contacts the AWS IoT service via HTTPS. Mutual authentication
-   between the Thing and server occurs and authenticity of the AWS IoT server
+   between the Thing and the server occurs and authenticity of the AWS IoT server
    is established.
 2. Similarly, the gateway also connects to the AWS IoT service via HTTPS. TLS
    mutual authentication is used to verify both AWS server and the gateway.
@@ -362,10 +343,10 @@ The mutual authentication happens as follows:
    the validity of group CA is also verified.
 4. The Thing then connects to an interested gateway through the use of group
    CA. TLS mutual authentication happens between gateway and Thing now, and can
-   be through MQTT. Local IP address is used to locate the MQTT broker, unlike
+   be through MQTT. The local IP address is used to locate the MQTT broker, unlike
    the first and second step where an _endpoint_ was used.
 5. Once connection is established, data now flows through the gateway to the
-   server using MQTT protocol.
+   server using the MQTT protocol.
 
 ## References
 

@@ -18,6 +18,6 @@ Modify `pubSub.py` to measure the latency of establishing the connection to the 
    module and use `perf_counter()` to measure the time. See
    [documentation](https://docs.python.org/3/library/time.html#time.perf_counter). Compare the measured time with the ping value optained from the VM to your gateway. 
 
-## Optional tasks
+## Optional task
 
-If you are doing the optional tasks, write your results here.
+If you are doing the optional task, write your results here.
