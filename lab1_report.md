@@ -10,7 +10,7 @@
 
 Provide a short description of the setup (hardware and software) and how the different components interact. Explain the steps you performed in the lab, e.g., using screenshots and photos.
 
-## How does the `getTemp` function work (1 p)
+## How does the `getTemp()` function work (1 p)
 
 ## What is the value returned by `mqttClient.messageQoS()`? What does it mean? (1 p)
 
