@@ -82,13 +82,13 @@ ready to upload your Lambda function `.zip` file to the AWS Lambda console.
 3. Choose _Author from scratch_ (this option may already be selected).
 
 4. Give a unique name for your function, e.g. `HelloWorld_GROUPNAME`, and
-   choose `Python 3.7` as _Runtime_. Select _Use an existing role_ and select `service-role/DefaultLambdaRole`
+   choose `Python 3.12` as _Runtime_. Select _Use an existing role_ and select `service-role/DefaultLambdaRole`
    in the _Existing Role_ field. Choose _Create function_.
 
 5. On the _Code source_ section, choose _Upload from .zip file_ and then upload
    `hello_world_python_lambda.zip`.
 
-6. Under _Runtime settings_ (scroll down) make sure that _Python 3.7_ is selected. You will also need to update the _Handler_ field. This is the function that is executed first when the lambda function is triggered: Press _Edit_, then change the field _Handler_ into `greengrassHelloWorld.function_handler`. 
+6. Under _Runtime settings_ (scroll down) make sure that _Python 3.12_ is selected. You will also need to update the _Handler_ field. This is the function that is executed first when the lambda function is triggered: Press _Edit_, then change the field _Handler_ into `greengrassHelloWorld.function_handler`. 
 
    Think a moment about what `greengrassHelloWorld.function_handler` corresponds to in the code source window. 
 
@@ -96,13 +96,13 @@ ready to upload your Lambda function `.zip` file to the AWS Lambda console.
 
 8. When you are ready to deploy this version press the button _Deploy_. 
    
-9. To check that there are no issues with the code, you can select the _Test tab_. Note that this is not the same as the Test-button in the code source box. Press the _Test_ button. Also you might need to change the _Event JSON_ input which corresponds to the input given to the lambda function.
+9. To check that there are no issues with the code, you can select the _Test tab_. Note that this is not the same as the Test-button in the code source box. Press the _Test_ button. Also you might need to change the _Event JSON_ input which corresponds to the input given to the lambda function, i.e., there should be a `message` key value pair in the _Event JSON_ field. Also, think about the time out that can be specified on the _Configuration_ tab.
 
 10. When you are ready to publish a version of your lambda function (a published version can be access by other parts of AWS) select _Actions > Publish new version_. Write a description in the _Version description_ field, such as _First version_ (or leave it empty), then select _Publish_.
 
 ### Configure Lambda for AWS Greengrass
 
-1. In the AWS IoT console, go to _AWS IoT > Manage > Greengrass devices > Components_. Press _Create component_.
+1. In the AWS IoT console, go to _AWS IoT > Manage > Greengrass devices > Components_. Press _Create component_. 
 
 2. Select _Import Lambda function_.
 
@@ -112,7 +112,7 @@ ready to upload your Lambda function `.zip` file to the AWS Lambda console.
 
 5. Under _Event sources_ we need to setup the bindings for when the Lambda function should be executed. Press _Add event source_ and set _Topic_ to `saiot/GROUPNAME/localtocloud` and _Type_ to `Local publish/subscribe`. Press _Add event source_ again and set _Topic_ to `saiot/GROUPNAME/cloudtolocal` and _Type_ to `AWS IoT Core MQTT`. The first one will be used to send the message from the VM and the second from the AWS console. 
 
-5. Set the _Timeout_ to `10` seconds. 
+5. Set the _Timeout_ to `11` or more seconds. Why?
 
 6. Select `True` under _Pinned_. A *long-lived (pinned) Lambda function* starts automatically after AWS Greengrass starts and keeps running in its own container (or sandbox). 
 
@@ -190,21 +190,15 @@ rpi> sudo systemctl restart greengrass
 
 From _AWS IoT_ -> _Test_ -> _MQTT test client_, setup a new subscriber to the topic _saiot/GROUPNAME/localtocloud_. Select _Display payloads as strings (more accurate)_ option and then _Subscribe_.
 
-1. From the left pane of the AWS IoT console, choose _Test_
-	
-2. Setup the subscriber connecting on the topic you used in step 1 of the previous section Configure clients (hello/world).
-
-3. Publisher will send message to the topic used in step 2 of the previous section Configure clients.
-
-Each publish is triggering the function handler and creating a new container for each invocation. The invocation count need not increment for every trigger because each on-demand Lambda function has its own container/sandbox. If you publish and trigger the function after waiting for timeout period (default 1s), you will see that the invocation count is incremented.
+Each publish is triggering the function handler and creating a new container for each invocation. The invocation count need not increment for every trigger because each on-demand Lambda function has its own container/sandbox. If you publish and trigger the function after waiting for timeout period (default 10 s), you will see that the invocation count is incremented.
 
 This shows that a container, first created from a prior invocation, is being reused, and pre-processing variables outside of function handler have been used.
 	
 ## To do
  
-1. Understand the `lambda_function.py` code that you had packaged into a Lambda function above.
+1. Understand the `greengrassHelloWorld.py` code that was packaged into the Lambda function above.
 2. Connect the simulated device that you created in the last lab, with the Lambda function. The setup you are looking at is given below. You can use `pubsub.py` to publish messages from your device (see Lab 3).
-    1. Device -> Lambda. Device sends message on topic `saiot/GROUPNAME/localtolambda`. Tip: you will need to update some of the settings for the component and deployment above.
+    1. Device -> Lambda. Device sends message on topic `saiot/GROUPNAME/localtolambda`. Tip: you will need to update some of the settings for the component and deployment above. 
     2. Lambda -> IoT Cloud. Lambda parses the message sent by the device and forwards it to IoT Cloud on topic `saiot/GROUPNAME/localtocloud`.
 3. In your report describe the achieved architecture and behavior of your application. Use figures to illustrate your description. (5p)
 4. In your report describe the behavior differences between a long-lived Lambda function and an on-demand Lambda function deployed on a gateway. Illustrate your response taking a simple application example and provide the corresponding sequence (UML) diagrams for each. (5p)
