@@ -287,7 +287,7 @@ If you run these commands on your own machine (not using the VM), you will proba
 ### Verify privacy (3 points)
 
 Repeat the previous steps to create another Thing. Call it _Snoopy_subscriber_GROUPNAME_. We will
-try to simulate a malicious subscriber using this Thing. After creation, select the _Snoopy_subscriber_GROUPNAME_ thing and press _Disassociate_ to deactivate it.
+try to simulate a malicious subscriber using this Thing. After creation, open the _Snoopy_subscriber_GROUPNAME_ thing (under _All Things_, _Things_). Then open the _Certificates_ tab and select the certificate. Now press _Detach_ to deactivate it.
 
 Instead of using the `Publisher_Sim`, use `Snoopy_Subscriber_GROUPNAME` and try
 to publish or subscribe to the same topic. 
