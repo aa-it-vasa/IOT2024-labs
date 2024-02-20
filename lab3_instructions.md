@@ -284,7 +284,7 @@ If you run these commands on your own machine (not using the VM), you will proba
 
 
 
-### Verify privacy
+### Verify privacy (3 points)
 
 Repeat the previous steps to create another Thing. Call it _Snoopy_subscriber_GROUPNAME_. We will
 try to simulate a malicious subscriber using this Thing. After creation, select the _Snoopy_subscriber_GROUPNAME_ thing and press _Disassociate_ to deactivate it.
