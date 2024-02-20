@@ -275,8 +275,7 @@ If you run these commands on your own machine (not using the VM), you will proba
 1. Get a working understanding of the code `pubsub.py`. The documentation can
    be found
    [here](https://s3.amazonaws.com/aws-iot-device-sdk-python-docs/sphinx/html/index.html#module-AWSIoTPythonSDK.core.greengrass.discovery.providers)
-2. Explain how the Thing connects to your gateway, including TLS mutual
-   authentication. Use relevant diagrams. Check the folder `groupCA` in your directory. (3p)
+2. Explain how the Thing connects to your gateway, including TLS mutual authentication. Use relevant diagrams. (3p)
 3. Modify `pubSub.py` to measure the latency of establishing the connection to the gateway. Use `time`
    module and use `perf_counter()` to measure the time. See
    [documentation](https://docs.python.org/3/library/time.html#time.perf_counter). Compare the measured time with the ping value optained from the VM to your gateway. (7p)
