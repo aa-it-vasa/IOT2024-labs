@@ -70,8 +70,7 @@ You are now ready to configure and deploy the Lambda function for AWS Greengrass
 In order for a Python Lambda function to run on a AWS Greengrass device, it
 must be packaged with specified folders from the Python AWS Greengrass core
 SDK. This step has already been done and you can find an archive
-`hello_world_python_lambda.zip` in the folder `SourceCode\Lab4` in the Github repository. Check the
-contents of this archive to verify that `lambda_function.py` is packaged
+`hello_world_python_lambda.zip` in the folder `SourceCode\Lab4` in the Github repository. Check the contents of this archive to verify that the code is packaged
 with AWS Greengrass core SDK, which forms the external dependency.  You are now
 ready to upload your Lambda function `.zip` file to the AWS Lambda console.
 
